@@ -1,0 +1,28 @@
+.actorsList {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 50px;
+    column-gap: 30px;
+}
+
+.actor {
+    list-style: none;
+    
+}
+
+.image {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+}
+
+.actorInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.span {
+    width: 200px;
+    height: 300px;
+}
