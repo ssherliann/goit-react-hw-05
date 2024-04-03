@@ -21,7 +21,6 @@ export default function MoviesPage() {
                 }
             });
             setMovies(response.data.results);
-            console.log(response.data.results)
         } catch (error) {
             setError(error.message);
         } finally {
@@ -57,7 +56,7 @@ export default function MoviesPage() {
                     placeholder="Search movies by title"
                     className={styles.input}
                 />
-                <button type="submit">Search</button>
+                <button type="submit" className={styles.buttonSubmit}>Search</button>
             </form>
             {loading && <p>Loading...</p>}
             {error && <p>Error: {error}</p>}

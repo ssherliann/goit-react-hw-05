@@ -1,7 +1,8 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import styles from './MovieList.module.css';
 
 export default function MovieList({ movies }) {
+    const location = useLocation()
 
     return (
         <div>
@@ -12,6 +13,7 @@ export default function MovieList({ movies }) {
                         <NavLink 
                             to={`/movies/${movie.id}`} 
                             className={styles.movieLink} 
+                            state={{ from: location }}
                         >
                             {movie.title}
                         </NavLink>

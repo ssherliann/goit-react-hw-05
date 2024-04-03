@@ -16,7 +16,6 @@ export default function HomePage() {
                     }
                 });
                 setMovies(response.data.results);
-                console.log(response.data.results)
             } catch (error) {
                 console.error('Error fetching movies:', error);
             }

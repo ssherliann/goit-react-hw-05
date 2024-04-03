@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { useParams, Outlet, NavLink, Link} from "react-router-dom";
+import { useParams, Outlet, NavLink, Link, useLocation } from "react-router-dom";
 import styles from './MovieDetailsPage.module.css';
 
 export default function MovieDetailsPage() {
     const [movie, setMovie] = useState({});
-    const { movieId } = useParams(); 
-    const params = useParams();
-    console.log(params);
+    const { movieId } = useParams();
+    const location = useLocation();
+    const backLinkRef = useRef(null);
 
     useEffect(() => {
         const fetchMovieDetails = async () => {
@@ -19,7 +19,6 @@ export default function MovieDetailsPage() {
                     }
                 });
                 setMovie(response.data);
-                console.log(response.data)
             } catch (error) {
                 console.error('Error:', error);
                 throw error;
@@ -28,13 +27,19 @@ export default function MovieDetailsPage() {
         fetchMovieDetails();
     }, [movieId]);
 
+    useEffect(() => {
+        if (backLinkRef.current) {
+            backLinkRef.current.focus();
+        }
+    }, [location]);
+
     if (!movie || !movie.title) {
         return <div>Loading...</div>;
     }
 
     return (
         <div className={styles.container}>
-            <Link to="/movies" className={styles.backLink}>Go to Movies</Link>
+            <Link to={location.state?.from || '/movies'} className={styles.backLink} ref={backLinkRef}>Back</Link>
             <div className={styles.fullInfo}>
                 <img src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`} className={styles.image} alt={movie.title}/>
                 <div className={styles.info}>
@@ -45,8 +50,8 @@ export default function MovieDetailsPage() {
                 </div>
             </div>
             <div className={styles.links}>
-                <NavLink to={`/movies/${movieId}/cast`} className={styles.castLink} >Cast</NavLink>
-                <NavLink to={`/movies/${movieId}/reviews`} className={styles.reviewsLink} >Reviews</NavLink>
+                <NavLink to={`/movies/${movieId}/cast`} className={styles.castLink}>Cast</NavLink>
+                <NavLink to={`/movies/${movieId}/reviews`} className={styles.reviewsLink}>Reviews</NavLink>
             </div>
             <Outlet />
         </div>
