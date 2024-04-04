@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import MovieList from '../../components/MovieList/MovieList';
 import axios from 'axios';
 import styles from './MoviesPage.module.css';
@@ -9,7 +9,17 @@ export default function MoviesPage() {
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const query = params.get('search');
+        if (query) {
+            setSearchQuery(query);
+            fetchMovies(query);
+        }
+    }, [location.search]);
 
     const fetchMovies = async (query) => {
         setLoading(true);
@@ -28,22 +38,13 @@ export default function MoviesPage() {
         }
     };
 
-    useEffect(() => {
-        const query = searchParams.get('search');
-        if (query) {
-            setSearchQuery(query);
-            fetchMovies(query);
-        }
-    }, [searchParams]);
-
     const handleSearchInputChange = (event) => {
         setSearchQuery(event.target.value);
     };
 
     const handleFormSubmit = (event) => {
         event.preventDefault();
-        searchParams.set('search', searchQuery);
-        fetchMovies(searchQuery);
+        navigate(`/movies?search=${searchQuery}`);
     };
 
     return (
@@ -64,8 +65,3 @@ export default function MoviesPage() {
         </div>
     );
 }
-
-
-
-
-
